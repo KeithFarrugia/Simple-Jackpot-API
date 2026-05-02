@@ -1,0 +1,35 @@
+services:
+    database:
+        image: postgres:18
+        container_name: api-database
+        environment:
+            POSTGRES_DB: api_database
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: password
+        ports:
+            - "5432:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U user -d api_database"]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+        volumes:
+            - postgres_data:/var/lib/postgresql
+
+    java_api:
+        build:
+            context: .
+            target: build
+        container_name: java-api
+        depends_on:
+            database:
+                condition: service_healthy
+        ports:
+            - "8080:8080"
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/api_database
+            SPRING_DATASOURCE_USERNAME: user
+            SPRING_DATASOURCE_PASSWORD: password
+
+volumes:
+    postgres_data:
