@@ -16,14 +16,26 @@ services:
         volumes:
             - postgres_data:/var/lib/postgresql
 
+    reports:
+        build:
+            context: .
+            target: test
+        container_name: reports
+        restart: "no"
+        entrypoint: ["sh", "-c", "cp -r /app/jacoco-staged/. /out/jacoco/ && cp -r /app/doxygen-staged/. /out/doxygen/"]
+        volumes:
+            - ./reports/jacoco:/out/jacoco
+            - ./reports/doxygen:/out/doxygen
+
     java_api:
         build:
             context: .
-            target: build
         container_name: java-api
         depends_on:
             database:
                 condition: service_healthy
+            reports:
+                condition: service_completed_successfully
         ports:
             - "8080:8080"
         environment:
