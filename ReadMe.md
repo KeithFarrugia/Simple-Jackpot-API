@@ -122,10 +122,9 @@ All endpoints can be explored and called directly from the browser.
 
 ## Endpoints & Example Inputs
 
-### POST `/addjackpot` - Create or Update a Jackpot
+### POST `/jackpots` - Create or Update a Jackpot
 
-Creates a new jackpot with the given name. If a jackpot with that name
-already exists, its win probability is updated instead.
+Creates a new jackpot with the given name and win probability.
 
 **Request body:**
 ```json
@@ -138,7 +137,7 @@ already exists, its win probability is updated instead.
 - `name` - display name, max 100 characters, must not be blank
 - `winProbability` - chance of winning per bet, must be between 0 and 1
 
-**Response:** the UUID of the created or updated jackpot
+**Response:** the UUID of the created jackpot
 
 ```json
 "a3f1c2d4-e5b6-7890-abcd-ef1234567890"

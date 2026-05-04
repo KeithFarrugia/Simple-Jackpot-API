@@ -53,38 +53,4 @@ class JackpotControllerTest {
         assertEquals(j.getId(), result);
         verify(jackpotRepo).save(any(Jackpot.class));
     }
-
-    /* ========================================================================
-     * This test makes sure that addJackpot updates the win probability of
-     * an existing jackpot when one with the given name already exists.
-     *
-     * No new jackpot should be created,  the existing one should be saved
-     * with the updated probability.
-     * ========================================================================
-     */
-    @Test
-    void Controller_addJackpot_updates() {
-        Jackpot.Request req      = new Jackpot.Request(
-            "TestJackpot", 
-            0.9f
-        );
-        Jackpot j = new Jackpot(
-            UUID.randomUUID(), 
-            "TestJackpot",
-            0.1f,
-            50.0,
-            0L,
-            null
-        );
-
-        when(jackpotRepo.findByName("TestJackpot")).
-            thenReturn(Optional.of(j));
-
-        when(jackpotRepo.save(j)).thenReturn(j);
-        
-        controller.addJackpot(req);
-
-        assertEquals(0.9f, j.getWinProbability());
-        verify(jackpotRepo).save(j);
-    }
 }

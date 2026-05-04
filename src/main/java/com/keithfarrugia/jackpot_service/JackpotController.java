@@ -1,7 +1,6 @@
 package com.keithfarrugia.jackpot_service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -29,20 +28,13 @@ public class JackpotController {
     }
 
     /**
-     * @brief Creates or updates a jackpot by name.
      * @param req Jackpot request data.
      * @return UUID of the jackpot.
      */
     @PostMapping
-    @Operation(summary = "Add or Update Jackpot")
+    @Operation(summary = "Create a jackpot")
     @ResponseStatus(HttpStatus.CREATED)
     public UUID addJackpot(@RequestBody @Valid Jackpot.Request req) {
-        Optional<Jackpot> result = jackpotRepo.findByName(req.name());
-        if (result.isPresent()){
-            Jackpot jackpot = result.get();
-            jackpot.setWinProbability(req.winProbability());
-            return jackpotRepo.save(jackpot).getId();
-        }
         return jackpotRepo.save(new Jackpot(req)).getId();
     }
 
