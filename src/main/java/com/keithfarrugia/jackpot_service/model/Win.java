@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * @brief   Namespace class grouping all win-related DTOs.
  *
@@ -40,6 +42,7 @@ public class Win {
      * @param playerAliases Filter by one or more player aliases.
      * @param timeRangeList Filter by one or more time windows.
      */
+    @Schema(name = "WinRequest")
     public record Request(
         List<UUID>      jackpotIds,
         List<Double>    winAmounts,
@@ -55,6 +58,7 @@ public class Win {
      * @param hasWon      Always true for records returned here.
      * @param winAmount   Total amount paid out to the player.
      */
+    @Schema(name = "WinResponse")
     public record Response(
         double  betAmount,
         String  playerAlias,
@@ -88,6 +92,7 @@ public class Win {
      * @param totalPages  Total number of pages available.
      * @param totalWins   Total number of matching winning bets.
      */
+    @Schema(name = "WinPagedResponse")
     public record PagedResponse(
         List<Response> wins,
         int            currentPage,

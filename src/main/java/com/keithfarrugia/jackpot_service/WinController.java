@@ -1,5 +1,6 @@
 package com.keithfarrugia.jackpot_service;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -10,7 +11,6 @@ import com.keithfarrugia.jackpot_service.model.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 
 
 /**
@@ -38,7 +38,7 @@ public class WinController {
     @GetMapping
     @Operation(summary = "Retrieve all wins")
     public Win.PagedResponse getWins(
-        @Valid Win.Request req,
+        @ParameterObject Win.Request req,
         @PageableDefault(size = 10, sort = "timestamp", 
                          direction = Sort.Direction.DESC) Pageable pageable
     ) {

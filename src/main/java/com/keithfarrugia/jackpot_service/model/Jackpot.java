@@ -3,6 +3,7 @@ package com.keithfarrugia.jackpot_service.model;
 import java.time.Instant;
 import java.util.UUID;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -89,6 +90,8 @@ public class Jackpot {
      * @param name           Display name. Not blank, max 100 chars.
      * @param winProbability Win chance per bet. Must be in (0, 1].
      */
+
+    @Schema(name = "JackpotRequest")
     public record Request(
         @NotBlank @Size(max = 100) String name,
         @Positive @Max(1)          float  winProbability
@@ -106,11 +109,15 @@ public class Jackpot {
      * @param numWins     Total number of times the pot was won.
      * @param lastWin     Timestamp of the most recent win, or null.
      */
+
+    @Schema(name = "JackpotResponse")
     public record Response(
         UUID    id,
         double  currentSize,
         long    numWins,
-        Instant lastWin
+        Instant lastWin,
+        double  winProbability,
+        String  name
     ) {
         /**
          * @brief Convenience constructor that maps from a Jackpot
@@ -120,8 +127,9 @@ public class Jackpot {
          */
         public Response(Jackpot j) {
             this(
-                j.getId(),          j.getCurrentSize(),
-                j.getNumWins(),     j.getLastWin()
+                j.getId(),              j.getCurrentSize(),
+                j.getNumWins(),         j.getLastWin(),
+                j.getWinProbability(),  j.getName()
             );
         }
     }

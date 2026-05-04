@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -89,6 +90,7 @@ public class Bet {
      * @param playerAlias Display name of the player.
      *                    Must not be blank, max 50 characters.
      */
+    @Schema(name = "BetRequest")
     public record Request(
         @NotNull                  UUID   jackpotId,
         @Positive                 double betAmount,
@@ -101,6 +103,8 @@ public class Bet {
      * @param winAmount Amount won. Zero if the player lost.
      * @param newSize   Current jackpot size after the bet.
      */
+
+    @Schema(name = "BetResponse")
     public record Response(double winAmount, double newSize) {}
 
     /* ======================================================================== */ 

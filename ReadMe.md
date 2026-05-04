@@ -72,6 +72,39 @@ Expected response when healthy:
   "status": "UP"
 }
 ```
+## Metrics
+ 
+Spring Boot Actuator exposes JVM and HTTP metrics out of the box.
+ 
+### All available metrics
+ 
+```
+GET http://localhost:8080/actuator/metrics
+```
+ 
+Returns a list of every metric name available.
+ 
+### Specific metric
+ 
+```
+GET http://localhost:8080/actuator/metrics/{metric-name}
+```
+ 
+**Total HTTP requests handled:**
+```
+GET http://localhost:8080/actuator/metrics/http.server.requests
+```
+ 
+**JVM heap memory used:**
+```
+GET http://localhost:8080/actuator/metrics/jvm.memory.used
+```
+ 
+**Active database connections:**
+```
+GET http://localhost:8080/actuator/metrics/hikaricp.connections.active
+```
+
 
 ---
 
