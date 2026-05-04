@@ -58,7 +58,7 @@ class JackpotControllerTest {
      * This test makes sure that addJackpot updates the win probability of
      * an existing jackpot when one with the given name already exists.
      *
-     * No new jackpot should be created — the existing one should be saved
+     * No new jackpot should be created,  the existing one should be saved
      * with the updated probability.
      * ========================================================================
      */

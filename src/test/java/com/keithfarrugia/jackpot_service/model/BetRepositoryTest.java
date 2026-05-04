@@ -58,9 +58,10 @@ class BetRepositoryTest {
      */
     @Test
     void Bet_returnWinsOnly() {
-        Win.Request req     = new Win.Request(
-            null, null, 
-            null, null
+        Win.Request req = new Win.Request(
+            null,
+             null, 
+            null
         );
         Page<Bet> result    = betRepo.findAll(
             Bet.fromRequest(req), PageRequest.of(0, 10)
@@ -83,7 +84,6 @@ class BetRepositoryTest {
     void Bet_filtersByJackpotId() {
         Win.Request req = new Win.Request(
             List.of(jackpotId), 
-            null, 
             null, 
             null
         );
@@ -110,7 +110,6 @@ class BetRepositoryTest {
         Win.Request req = new Win.Request(
             List.of(nonUsedId), 
             null,
-            null, 
             null
         );
         Page<Bet> result = betRepo.findAll(
@@ -134,8 +133,7 @@ class BetRepositoryTest {
         Win.Request req = new Win.Request(
             null, 
             null,
-            List.of("Bob"), 
-            null
+            List.of("Bob")
         );
 
         Page<Bet> result = betRepo.findAll(
@@ -162,8 +160,8 @@ class BetRepositoryTest {
         Win.Request req = new Win.Request(
             null, 
             List.of(200.0), 
-            null, 
-            null);
+            null
+        );
         Page<Bet> result = betRepo.findAll(
             Bet.fromRequest(req), 
             PageRequest.of(0, 10)
@@ -174,67 +172,5 @@ class BetRepositoryTest {
             assertTrue  (bet.isHasWon());
             assertEquals(200.0, bet.getWinAmount());
         }
-    }
-
-    /* ========================================================================
-     * This test makes sure that the specification builder inside Bet
-     * correctly generates a predicate that filters results by time range.
-     *
-     * Only winning bets whose timestamp falls within the given range should
-     * be returned.
-     * ========================================================================
-     */
-    @Test
-    void Bet_filtersTimeRange() {
-        Instant start = time.minusSeconds(10);
-        Instant end   = time.plusSeconds(10);
-
-        Win.Request req = new Win.Request(
-            null, 
-            null, 
-            null,
-            List.of(new Win.TimeRange(start, end))
-        );
-
-        Page<Bet> result = betRepo.findAll(
-            Bet.fromRequest(req), 
-            PageRequest.of(0, 10)
-        );
-
-        assertFalse(result.getContent().isEmpty());
-        for (Bet bet : result) {
-            assertTrue  (bet.isHasWon());
-            assertTrue(
-                !bet.getTimestamp().isBefore(start)  && // >= start
-                !bet.getTimestamp().isAfter(end)        // <= end
-            );
-        }
-    }
-    
-    /* ========================================================================
-     * This test makes sure that the specification builder inside Bet
-     * correctly excludes bets whose timestamp falls outside the given range.
-     *
-     * A range entirely in the future should return no results.
-     * ========================================================================
-     */
-    @Test
-    void Bet_filtersOutsideTimeRange() {
-        Instant start = time.plusSeconds(100);
-        Instant end   = time.plusSeconds(200);
-
-        Win.Request req = new Win.Request(
-            null, 
-            null, 
-            null,
-            List.of(new Win.TimeRange(start, end))
-        );
-
-        Page<Bet> result = betRepo.findAll(
-            Bet.fromRequest(req), 
-            PageRequest.of(0, 10)
-        );
-        
-        assertTrue(result.getContent().isEmpty());
     }
 }

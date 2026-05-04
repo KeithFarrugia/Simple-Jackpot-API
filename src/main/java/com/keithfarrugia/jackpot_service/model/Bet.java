@@ -150,22 +150,6 @@ public class Bet {
                 );
             }
 
-            // A bet qualifies if it falls in ANY of the ranges
-            if (req.timeRangeList() != null
-                    && !req.timeRangeList().isEmpty()) {
-                List<Predicate> rangePredicates = new ArrayList<>();
-                for (Win.TimeRange range : req.timeRangeList()) {
-                    rangePredicates.add(cb.between(
-                        root.get("timestamp"),
-                        range.start(),
-                        range.end()
-                    ));
-                }
-                predicates.add(
-                    cb.or(rangePredicates.toArray(new Predicate[0]))
-                );
-            }
-
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

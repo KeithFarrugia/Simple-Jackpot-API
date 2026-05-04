@@ -39,7 +39,7 @@ public class WinController {
     @Operation(summary = "Retrieve all wins")
     public Win.PagedResponse getWins(
         @ParameterObject Win.Request req,
-        @PageableDefault(size = 10, sort = "timestamp", 
+        @ParameterObject @PageableDefault(size = 10, sort = "timestamp", 
                          direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<Bet> page = betRepo.findAll(Bet.fromRequest(req), pageable);

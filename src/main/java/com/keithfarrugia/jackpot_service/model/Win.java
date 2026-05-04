@@ -1,6 +1,5 @@
 package com.keithfarrugia.jackpot_service.model;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,27 +11,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @brief   Namespace class grouping all win-related DTOs.
  *
  * @details Contains the records used to filter, return, and page
- *          winning bet results. This class is never instantiated —
+ *          winning bet results. This class is never instantiated, 
  *          it exists solely to keep win-related types together
  *          under a single, descriptive name.
  */
 public class Win {
 
     /**
-     * @brief Represents an inclusive time window for filtering bets.
-     *
-     * @param start Lower bound of the range (inclusive).
-     * @param end   Upper bound of the range (inclusive).
-     */
-    public record TimeRange(
-        Instant start,
-        Instant end
-    ) {}
-
-    /**
      * @brief   Inbound DTO for querying wins with optional filters.
      *
-     * @details Any field left null is ignored — only non-null,
+     * @details Any field left null is ignored,  only non-null,
      *          non-empty lists are applied as filters. Multiple
      *          time ranges are combined with OR so a bet qualifies
      *          if it falls within any one of them.
@@ -40,14 +28,12 @@ public class Win {
      * @param jackpotIds    Filter by one or more jackpot IDs.
      * @param winAmounts    Filter by exact win amounts.
      * @param playerAliases Filter by one or more player aliases.
-     * @param timeRangeList Filter by one or more time windows.
      */
     @Schema(name = "WinRequest")
     public record Request(
         List<UUID>      jackpotIds,
         List<Double>    winAmounts,
-        List<String>    playerAliases,
-        List<TimeRange> timeRangeList
+        List<String>    playerAliases
     ) {}
 
     /**

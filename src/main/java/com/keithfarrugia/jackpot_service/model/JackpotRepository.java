@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @details Provides standard CRUD operations via JpaRepository and
  *          dynamic queries via JpaSpecificationExecutor. Also exposes
- *          two atomic native SQL operations — addToPot and claimPot —
+ *          two atomic native SQL operations,  addToPot and claimPot, 
  *          that use PostgreSQL RETURNING to avoid a separate read
  *          after each write.
  */
@@ -77,13 +77,16 @@ public interface JackpotRepository
      */
     @Transactional
     @Query(value = """
+        WITH prev AS (
+            SELECT current_size FROM jackpot WHERE id = :id
+        )
         UPDATE jackpot SET
             current_size = 0,
             last_win     = :now,
             num_wins     = num_wins + 1
-        WHERE id   = :id
+        WHERE id = :id
         AND  (last_win IS NULL OR last_win < :now)
-        RETURNING current_size + :bet AS win_amount
+        RETURNING (SELECT current_size FROM prev) + :bet AS win_amount
     """, nativeQuery = true)
     Optional<Double> claimPot(
         @Param("id")  UUID    id,
