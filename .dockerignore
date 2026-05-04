@@ -1,0 +1,12 @@
+.vscode/
+.idea/
+.mvn/
+*.iml
+
+target/
+build/
+*.log
+reports/
+
+.git/
+.gitignore

@@ -22,17 +22,17 @@ import org.springframework.web.server.ResponseStatusException;
 import com.keithfarrugia.jackpot_service.model.*;
 
 @ExtendWith(MockitoExtension.class)
-class ControllerTest {
+class BetControllerTest {
 
     @Mock JackpotRepository        jackpotRepo;
     @Mock BetRepository            betRepo;
     @Mock BetIdempotencyRepository betIdemRepo;
 
-    @InjectMocks Controller controller;
+    @InjectMocks BetController controller;
 
-    UUID        jackpotId;
-    UUID        idempotencyKey;
-    Jackpot     jackpot;
+    UUID         jackpotId;
+    UUID         idempotencyKey;
+    Jackpot      jackpot;
     Bet.Request betReq;
 
     @BeforeEach
@@ -41,7 +41,7 @@ class ControllerTest {
         idempotencyKey = UUID.randomUUID();
 
         jackpot        = new Jackpot(
-            UUID.randomUUID(), 
+            jackpotId, 
             "TestJackpot", 
             0.0f, 
             100.0, 
@@ -55,73 +55,6 @@ class ControllerTest {
     }
 
     /* ========================================================================
-     * This test makes sure that addJackpot creates and saves a new jackpot
-     * when no jackpot with the given name exists in the repository.
-     *
-     * The returned UUID should match the ID of the newly saved jackpot.
-     * ========================================================================
-     */
-    @Test
-    void Controller_addJackpot_createsNew() {
-        Jackpot.Request req = new Jackpot.Request(
-            "NewJackpot",
-            0.5f
-        );
-
-        Jackpot j = new Jackpot(
-            UUID.randomUUID(),
-            "NewJackpot",
-            0.5f,
-            0.0,
-            0L,
-            null
-        );
-
-        when(jackpotRepo.findByName("NewJackpot")).
-            thenReturn(Optional.empty());
-        when(jackpotRepo.save(any())).thenReturn(j);
-
-        UUID result = controller.addJackpot(req);
-
-        assertEquals(j.getId(), result);
-        verify(jackpotRepo).save(any(Jackpot.class));
-    }
-
-    /* ========================================================================
-     * This test makes sure that addJackpot updates the win probability of
-     * an existing jackpot when one with the given name already exists.
-     *
-     * No new jackpot should be created — the existing one should be saved
-     * with the updated probability.
-     * ========================================================================
-     */
-    @Test
-    void Controller_addJackpot_updates() {
-        Jackpot.Request req      = new Jackpot.Request(
-            "TestJackpot", 
-            0.9f
-        );
-        Jackpot j = new Jackpot(
-            UUID.randomUUID(), 
-            "TestJackpot",
-            0.1f,
-            50.0,
-            0L,
-            null
-        );
-
-        when(jackpotRepo.findByName("TestJackpot")).
-            thenReturn(Optional.of(j));
-
-        when(jackpotRepo.save(j)).thenReturn(j);
-        
-        controller.addJackpot(req);
-
-        assertEquals(0.9f, j.getWinProbability());
-        verify(jackpotRepo).save(j);
-    }
-
-    /* ========================================================================
      * This test makes sure that makeBet returns the original result without
      * processing a new bet when the idempotency key has already been used.
      *
@@ -131,7 +64,7 @@ class ControllerTest {
     @Test
     void Controller_makeBet_IdempotencyDup() {
         UUID betId = UUID.randomUUID();
-        Bet  bet   = new Bet();
+        Bet   bet   = new Bet();
 
         bet.setId(betId);
         bet.setWinAmount(110.0);
