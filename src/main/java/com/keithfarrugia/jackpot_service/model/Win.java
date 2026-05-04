@@ -61,7 +61,8 @@ public class Win {
                 bet.getBetAmount(),
                 bet.getPlayerAlias(),
                 bet.isHasWon(),
-                bet.getWinAmount()
+                bet.getWinAmount(),
+                bet.getTimestamp()
             );
         }
     }
