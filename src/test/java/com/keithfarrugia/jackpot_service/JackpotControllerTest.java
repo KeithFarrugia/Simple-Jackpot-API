@@ -4,7 +4,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -43,9 +42,6 @@ class JackpotControllerTest {
             0L,
             null
         );
-
-        when(jackpotRepo.findByName("NewJackpot")).
-            thenReturn(Optional.empty());
         when(jackpotRepo.save(any())).thenReturn(j);
 
         UUID result = controller.addJackpot(req);
