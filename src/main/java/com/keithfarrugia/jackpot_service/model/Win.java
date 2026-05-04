@@ -1,5 +1,6 @@
 package com.keithfarrugia.jackpot_service.model;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,7 +50,8 @@ public class Win {
         double  betAmount,
         String  playerAlias,
         boolean hasWon,
-        double  winAmount
+        double  winAmount,
+        Instant timestamp
     ) {
         /**
          * @brief Convenience constructor that maps from a Bet entity.
